@@ -22,7 +22,7 @@ cmd:option('-max_epoch', 100, 'number of full passes through the training data')
 cmd:option('-dropout', 0.5, 'dropout')
 cmd:option('-learning_rate', 1e-4, 'learning rate')
 cmd:option('-batch_size', 100, 'number of sequences to train on in parallel')
-cmd:option('-gpu',1,'0 - cpu, 1 - cunn, 2 - cudnn')
+cmd:option('-gpu',2,'0 - cpu, 1 - cunn, 2 - cudnn')
 cmd:option('-output_path', 'images', 'path for output images')
 
 local opt = cmd:parse(arg)
@@ -46,12 +46,6 @@ local dataset = load_data(opt)
 --
 print("building model...")
 
--- 1:up 2:up-right 3:right 4:down-right 5:down 6:down-left 7:left 8:up-left 9:stop
-local action_offset = torch.LongTensor({
-        {-1,0}, {-1,1}, {0,1}, {1,1}, {1,0}, {1,-1}, {0,-1}, {-1,-1}, {0, 0}
-      }):repeatTensor(opt.batch_size, 1, 1)
-
-
 local encoder = nn.Sequential()
 encoder:add(nn.JoinTable(2))
 encoder:add(nn.Linear(opt.action_size + opt.grid_size, opt.grid_size))
@@ -71,8 +65,6 @@ if opt.dropout > 0 then decoder:add(nn.Dropout(opt.dropout)) end
 decoder:add(nn.Linear(opt.action_size, opt.action_size))
 decoder:add(nn.ReLU())
 decoder:add(nn.SoftMax())
-
-
 
 local model = nn.Sequential()
 model:add(nn.ConcatTable()
@@ -100,8 +92,6 @@ if opt.gpu > 0 then
 end
 
 local params, grad_params = model:getParameters()
-
-
 --
 -- optimize
 --
@@ -132,8 +122,6 @@ function feval(x)
     
   return loss, grad_params
 end
-
-
 --
 -- training
 --
