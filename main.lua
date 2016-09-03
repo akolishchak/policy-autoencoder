@@ -9,7 +9,6 @@
 require 'nn'
 require 'optim'
 require 'dataset'
-require 'MultinomialAction'
 
 cmd = torch.CmdLine()
 cmd:text()
@@ -18,7 +17,7 @@ cmd:text()
 cmd:text('Options')
 cmd:option('-train_size', 100000, 'size of train set')
 cmd:option('-test_size', 10, 'size of test set')
-cmd:option('-grid_width', 4, 'grid size')
+cmd:option('-grid_width', 10, 'grid size')
 cmd:option('-max_epoch', 100, 'number of full passes through the training data')
 cmd:option('-dropout', 0.5, 'dropout')
 cmd:option('-learning_rate', 1e-4, 'learning rate')
@@ -179,8 +178,6 @@ _,pred_action_i = torch.max(pred_action, 2)
 print(action_i)
 print(pred_action_i)
 print(pred_action)
-
-
 local pred_state2 = output[1]
 _,state2_i = torch.max(state2, 2)
 _,pred_state2_i = torch.max(pred_state2, 2)
