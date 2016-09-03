@@ -6,12 +6,12 @@ The test environment is a grid world consisting of an dot agent with 9 actions: 
 
 Initial state|Action|Next state 
 :---:|:---:|:---:
-![alt tag](initial_state.png)|Move right|![alt tag](next_state.png)
+![alt tag](images/initial_state.png)|Move right|![alt tag](images/next_state.png)
 
 The model consists of two modules: 
 - Encoder that accepts initial state and action and outputs a next state; 
 - Decoder that takes initial state, next state and outputs an action.
-![alt tag](model.png)
+![alt tag](images/model.png)
 
 The trained model can be decoupled in to: 
 - Encoder module used for prediction of next state - state transition function; 
